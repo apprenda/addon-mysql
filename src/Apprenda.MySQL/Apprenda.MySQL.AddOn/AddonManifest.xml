@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<addonManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns="http://schemas.apprenda.com/AddonManifest"
+               xsi:schemaLocation="http://schemas.apprenda.com/AddonManifest http://apprenda.com/schemas/platform/6.0/AddonManifest.xsd"
+               name="MySQL"
+               manifestVersion="1"
+               version="9.5.3"
+               description="Provides MySQL databases scoped to a development team."
+               deploymentNotes="This add-on assumes that you already have a MySQL instnace running, configured with authentication, and one admin user.  The admin username and password are needed to create client databases."
+               developerHelp=""
+               vendor="Apprenda"
+               author="P. van Dorp">
+  <properties>
+    <property key="mysqlServer" displayName="MySQL Server" description="The server name of a MySQL instance." value=""/>
+    <property key="mysqlServerPort" displayName="MySQL Server Port" description="The server port of a MySQL instance." value=""/>
+    <property key="mysqlAdminDatabase" displayName="MySQL Master Database" description="The master database of a MySQL instance." value=""/>
+    <property key="mysqlAdminUser" displayName="MySQL Admin User" description="The username of a MySQL administrator." value=""/>
+    <property key="mysqlAdminPassword" displayName="MySQL Admin Password" description="The password of a MySQL administrator." value=""/>
+  </properties>
+</addonManifest>
