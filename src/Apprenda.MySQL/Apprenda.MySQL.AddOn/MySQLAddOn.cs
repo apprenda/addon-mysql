@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Nmysql;
 using System.Security.Cryptography;
 using System.Data;
+using MySql.Data.MySqlClient;
 using Apprenda.Services.Logging;
 
 namespace Apprenda.MySQL.AddOn
@@ -18,12 +18,12 @@ namespace Apprenda.MySQL.AddOn
         const string DatabaseUsernameFormatter = @"'DB_{0}__{1}'@'%'";
 
         private static readonly ILogger log = LogManager.Instance().GetLogger(typeof(MySQLAddOn));
-
+        
         static class Queries
         {
-            public const string CreateUser = @"CREATE USER '{0}' IDENTIFIED BY '{1}';";
+            public const string CreateUser = @"CREATE USER {0} IDENTIFIED BY '{1}';";
             public const string CreateDatabase = @"CREATE DATABASE {0};";
-            public const string GrantAllPrivilegesToDatabase = @"GRANT ALL {0}.* TO {1};";
+            public const string GrantAllPrivilegesToDatabase = @"GRANT ALL ON {0}.* TO {1};";
             public const string DropDatabase = @"DROP DATABASE IF EXISTS {0};";
             public const string DropUser = @"DROP USER IF EXISTS {0}";
         }
@@ -162,42 +162,42 @@ namespace Apprenda.MySQL.AddOn
             return result;
         }
 
-        private void DropDatabase(NmysqlConnection connection)
+        private void DropDatabase(MySqlConnection connection)
         {
             var dropDatabaseCommand = connection.CreateCommand();
             dropDatabaseCommand.CommandText = string.Format(Queries.DropDatabase, NewDatabase);
             ExecuteCommand(dropDatabaseCommand);
         }
 
-        private void DropUser(NmysqlConnection connection)
+        private void DropUser(MySqlConnection connection)
         {
             var dropUserCommand = connection.CreateCommand();
             dropUserCommand.CommandText = string.Format(Queries.DropUser, NewUserId);
             ExecuteCommand(dropUserCommand);
         }
 
-        private void GrantPrivileges(NmysqlConnection connection)
+        private void GrantPrivileges(MySqlConnection connection)
         {
             var grantPrivilegesCommand = connection.CreateCommand();
             grantPrivilegesCommand.CommandText = string.Format(Queries.GrantAllPrivilegesToDatabase, NewDatabase, NewUserId);
             ExecuteCommand(grantPrivilegesCommand);
         }
 
-        private void CreateDatabase(NmysqlConnection connection)
+        private void CreateDatabase(MySqlConnection connection)
         {
             var createDatabaseCommand = connection.CreateCommand();
             createDatabaseCommand.CommandText = string.Format(Queries.CreateDatabase, NewDatabase, NewUserId);
             ExecuteCommand(createDatabaseCommand);
         }
 
-        private void CreateUser(NmysqlConnection connection)
+        private void CreateUser(MySqlConnection connection)
         {
             var createUserCommand = connection.CreateCommand();
             createUserCommand.CommandText = string.Format(Queries.CreateUser, NewUserId, NewPassword);
             ExecuteCommand(createUserCommand);
         }
 
-        private static void ExecuteCommand(NmysqlCommand command)
+        private static void ExecuteCommand(MySqlCommand command)
         {
             command.CommandType = CommandType.Text;
             command.ExecuteNonQuery();
@@ -236,16 +236,16 @@ namespace Apprenda.MySQL.AddOn
             return password;
         }
 
-        private NmysqlConnection GetConnection(List<AddonProperty> properties)
+        private MySqlConnection GetConnection(List<AddonProperty> properties)
         {
             ParseProperties(properties);
 
             return GetConnection(AdminConnectionString);
         }
 
-        private NmysqlConnection GetConnection(string connectionString)
+        private MySqlConnection GetConnection(string connectionString)
         {
-            var connection = new NmysqlConnection(connectionString);
+            var connection = new MySqlConnection(connectionString);
             connection.Open();
             return connection;
         }
